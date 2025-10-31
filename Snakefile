@@ -269,7 +269,7 @@ rule download_pizza_and_chili_dblp:
         """
         cd source
         URL="https://pizzachili.dcc.uchile.cl/texts/xml/dblp.xml.gz"
-        FILENAME="dblp.gz"
+        FILENAME="dblp.xml.gz"
         RESULT="dblp"
         if [ ! -f "$FILENAME" ]; then
             curl -O "$URL"
