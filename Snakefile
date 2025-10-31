@@ -140,7 +140,9 @@ rule grammar_compress:
         source = 'source/{filename}'
     output:
         compressed_file = 'data/{filename}'
-    bench: 'bench/{filename}.csv'
+    params:
+        threads = NUMBER_OF_PROCESSORS
+    benchmark: 'bench/{filename}.csv'
     shell:
         """java -jar extractor/grammarextractor_20250930-214357.jar -c -InputFile={input.source}
         mv {input.source}.rp {output.compressed_file}"""
