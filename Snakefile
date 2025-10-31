@@ -286,4 +286,7 @@ rule download_pizza_and_chili_dblp:
 
 rule install_java:
     shell:
-        """sudo apt install openjdk-21-jdk"""
+        """sudo apt install openjdk-21-jdk -y
+        sudo apt install gradle -y
+        ./gradlew build
+        """
