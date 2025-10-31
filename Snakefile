@@ -278,6 +278,7 @@ rule download_pizza_and_chili_dblp:
         fi
         if [ ! -f "$RESULT" ]; then
             gzip -dk "$FILENAME"
+            mv $FILENAME $RESULT
         else
             echo "$RESULT already exists. Skipping decompression."
         fi
