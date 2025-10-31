@@ -270,7 +270,7 @@ rule download_pizza_and_chili_dblp:
         cd source
         URL="https://pizzachili.dcc.uchile.cl/texts/xml/dblp.xml.gz"
         FILENAME="dblp.xml.gz"
-        RESULT="dblp"
+        RESULT="dblp.xml"
         if [ ! -f "$FILENAME" ]; then
             curl -O "$URL"
         else
@@ -278,10 +278,10 @@ rule download_pizza_and_chili_dblp:
         fi
         if [ ! -f "$RESULT" ]; then
             gzip -dk "$FILENAME"
-            mv $FILENAME $RESULT
         else
             echo "$RESULT already exists. Skipping decompression."
         fi
+        mv $RESULT dblp 
         """
 
 rule install_java:
