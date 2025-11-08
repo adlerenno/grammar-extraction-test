@@ -149,7 +149,7 @@ rule grammar_compress:
 
 rule generate_queries:
     input:
-        test_file = 'data/{file}'
+        test_file = 'source/{file}'
     output:
         queries_file = 'queries/{file}.{length}'
     run:
