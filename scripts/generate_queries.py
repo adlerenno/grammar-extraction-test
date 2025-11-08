@@ -14,7 +14,8 @@ def generate_queries(input_file, output_path, query_length, num_queries):
     print('Generating queries for', input_file, 'to', output_path)
     file_length = get_file_length(input_file)
     queries = random.sample(range(file_length-query_length), num_queries)  # - query_length to avoid runout of string.
-
+    print('Generated queries:', queries[1:4])
+    with open(output_path, 'w') as out:
     # Write to output file
     with open(output_path, 'w') as out:
         for query in queries:
