@@ -11,6 +11,7 @@ def get_file_length(file_path):
     return char_count
 
 def generate_queries(input_file, output_path, query_length, num_queries):
+    print('Generating queries for', input_file, 'to', output_path)
     file_length = get_file_length(input_file)
     queries = random.sample(range(file_length-query_length), num_queries)  # - query_length to avoid runout of string.
 
