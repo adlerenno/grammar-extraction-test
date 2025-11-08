@@ -154,7 +154,7 @@ rule generate_queries:
         queries_file = 'queries/{file}.{length}'
     run:
         from scripts.generate_queries import generate_queries
-        generate_queries(input.test_file, output.queries_file, wildcards.length, 100)
+        generate_queries(input.test_file, output.queries_file, int(wildcards.length), 100)
 
 
 rule download_pizza_and_chili_sources:
