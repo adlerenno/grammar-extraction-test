@@ -89,8 +89,7 @@ rule grammar_extract_sakai_et_al:
         threads = NUMBER_OF_PROCESSORS
     benchmark: 'bench/{filename}.{length}.er.csv'
     shell:
-        """
-        all_success=true
+        """all_success=true
         content="$(cat {input.source})"
         while IFS=' ' read -r num1 num2; do
             [[ -z "$num1" || -z "$num2" ]] && continue  # skip empty lines
@@ -100,7 +99,7 @@ rule grammar_extract_sakai_et_al:
                 all_success=false
                 echo "extract-recmpress failed on {input.source} for $num1 $num2"
             fi
-        done
+        done < {input.queries}
         if $all_success; then
             echo 1 > {output.indicator}
         else
@@ -118,8 +117,7 @@ rule grammar_extract_decompress_extract_compress:
         threads = NUMBER_OF_PROCESSORS
     benchmark: 'bench/{filename}.{length}.dec.csv'
     shell:
-        """
-        all_success=true
+        """all_success=true
         content="$(cat {input.source})"
         while IFS=' ' read -r num1 num2; do
             [[ -z "$num1" || -z "$num2" ]] && continue  # skip empty lines
@@ -129,7 +127,7 @@ rule grammar_extract_decompress_extract_compress:
                 all_success=false
                 echo "extract-recmpress failed on {input.source} for $num1 $num2"
             fi
-        done
+        done < {input.queries}
         if $all_success; then
             echo 1 > {output.indicator}
         else
