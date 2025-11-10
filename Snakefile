@@ -94,7 +94,7 @@ rule grammar_extract_sakai_et_al:
         while IFS=' ' read -r num1 num2; do
             [[ -z "$num1" || -z "$num2" ]] && continue  # skip empty lines
             echo "Query $num1 to $num2"
-            java -jar grammarextractor_20250930-214357.jar -r -InputFile {input.source} -OutputFile temp.dumb -from "$num1" -to "$num2" -passes 0
+            java -jar grammarextractor_20251110-153000.jar -r -InputFile {input.source} -OutputFile temp.dumb -from "$num1" -to "$num2" -passes 0
             if [[ $? -ne 0 ]]; then
                 all_success=false
                 echo "extract-recmpress failed on {input.source} for $num1 $num2"
@@ -122,7 +122,7 @@ rule grammar_extract_decompress_extract_compress:
         while IFS=' ' read -r num1 num2; do
             [[ -z "$num1" || -z "$num2" ]] && continue  # skip empty lines
             echo "Query $num1 to $num2"
-            java -jar grammarextractor_20250930-214357.jar -e -InputFile {input.source} -OutputFile temp.dumb -from "$num1" -to "$num2"
+            java -jar grammarextractor_20251110-153000.jar -e -InputFile {input.source} -OutputFile temp.dumb -from "$num1" -to "$num2"
             if [[ $? -ne 0 ]]; then
                 all_success=false
                 echo "extract-recmpress failed on {input.source} for $num1 $num2"
@@ -144,7 +144,7 @@ rule grammar_compress:
         threads = NUMBER_OF_PROCESSORS
     benchmark: 'bench/{filename}.csv'
     shell:
-        """java -jar grammarextractor_20250930-214357.jar -c -InputFile {input.source}
+        """java -jar grammarextractor_20251110-153000.jar -c -InputFile {input.source}
         mv {input.source}.rp {output.compressed_file}"""
 
 rule generate_queries:
