@@ -94,6 +94,7 @@ rule grammar_extract_sakai_et_al:
         content="$(cat {input.source})"
         while IFS=' ' read -r num1 num2; do
             [[ -z "$num1" || -z "$num2" ]] && continue  # skip empty lines
+            echo "Query $num1 to $num2"
             java -jar grammarextractor_20250930-214357.jar -r -InputFile {input.source} -OutputFile temp.dumb -from "$num1" -to "$num2"
             if [[ $? -ne 0 ]]; then
                 all_success=false
@@ -122,6 +123,7 @@ rule grammar_extract_decompress_extract_compress:
         content="$(cat {input.source})"
         while IFS=' ' read -r num1 num2; do
             [[ -z "$num1" || -z "$num2" ]] && continue  # skip empty lines
+            echo "Query $num1 to $num2"
             java -jar grammarextractor_20250930-214357.jar -e -InputFile {input.source} -OutputFile temp.dumb -from "$num1" -to "$num2"
             if [[ $? -ne 0 ]]; then
                 all_success=false
@@ -283,6 +285,13 @@ rule download_pizza_and_chili_dblp:
         fi
         mv $RESULT dblp 
         """
+
+rule download_large_scale_source_datasts:
+    output:
+        out_files = ['']
+    shell:
+        """./scripts/download_dataset.py -s 200GiB -l all -o ./source
+        ./scripts/decompress_dataset.py --dataset <abs_path_archive> -o ./source"""
 
 rule install_java:
     shell:
