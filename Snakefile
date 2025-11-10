@@ -94,7 +94,7 @@ rule grammar_extract_sakai_et_al:
         while IFS=' ' read -r num1 num2; do
             [[ -z "$num1" || -z "$num2" ]] && continue  # skip empty lines
             echo "Query $num1 to $num2"
-            java -jar grammarextractor_20250930-214357.jar -r -InputFile {input.source} -OutputFile temp.dumb -from "$num1" -to "$num2"
+            java -jar grammarextractor_20250930-214357.jar -r -InputFile {input.source} -OutputFile temp.dumb -from "$num1" -to "$num2" -passes 0
             if [[ $? -ne 0 ]]; then
                 all_success=false
                 echo "extract-recmpress failed on {input.source} for $num1 $num2"
