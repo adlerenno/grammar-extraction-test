@@ -92,7 +92,6 @@ rule grammar_extract_sakai_et_al:
     benchmark: 'bench/{filename}.{length}.er.csv'
     shell:
         """all_success=true
-        content="$(cat {input.source})"
         while IFS=' ' read -r num1 num2; do
             [[ -z "$num1" || -z "$num2" ]] && continue  # skip empty lines
             echo "Query $num1 to $num2"
@@ -120,7 +119,6 @@ rule grammar_extract_decompress_extract_compress:
     benchmark: 'bench/{filename}.{length}.dec.csv'
     shell:
         """all_success=true
-        content="$(cat {input.source})"
         while IFS=' ' read -r num1 num2; do
             [[ -z "$num1" || -z "$num2" ]] && continue  # skip empty lines
             echo "Query $num1 to $num2"
