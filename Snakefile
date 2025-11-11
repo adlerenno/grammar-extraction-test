@@ -8,7 +8,8 @@ NUMBER_OF_PROCESSORS = 32
 
 DIR = "./"
 SOURCE = './source/'
-INPUT = './data/'
+INPUT = './input/'
+DATA = './data/'
 OUTPUT = './compressed/'
 QUERIES = './queries/'
 INDICATORS = './indicators/'
@@ -39,7 +40,7 @@ FILES = [f'indicators/{file}.{length}.{approach}'
          if not (approach, length, file) in OMITTED_COMBINATIONS
          ]
 
-for path in [BENCHMARK, SOURCE, INPUT, OUTPUT, QUERIES, INDICATORS, RESULT]:
+for path in [BENCHMARK, SOURCE, INPUT, DATA, OUTPUT, QUERIES, INDICATORS, RESULT]:
     os.makedirs(path, exist_ok=True)
 
 
@@ -71,6 +72,7 @@ rule clean:
     shell:
         """
         rm -rf ./source
+        rm -rf ./input
         rm -rf ./data
         rm -rf ./compressed
         rm -rf ./queries
@@ -135,11 +137,19 @@ rule grammar_extract_decompress_extract_compress:
         fi
         """
 
+rule reformat_to_human_readable:
+    input:
+        source = 'input/{filename}.rp',
+    output:
+        compressed_file = 'data/{filename}'
+    shell:
+        """./decoder_mac {input.source} {output.compressed_file}"""
+
 rule grammar_compress:
     input:
         source = 'source/{filename}'
     output:
-        compressed_file = 'data/{filename}'
+        compressed_file = 'input/{filename}.rp'
     params:
         threads = NUMBER_OF_PROCESSORS
     benchmark: 'bench/{filename}.csv'
