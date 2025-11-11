@@ -21,4 +21,9 @@ snakemake --cores 1
 
 ## Notes
 
-The encoder_mac and decoder_mac files are the encoder and decoder files from the project, as their names are hardcoded for some reasons and the mac versions doe not work on linux.
+The encoder_mac and decoder_mac files are the encoder and decoder files from the project. 
+The renaming was necessary as their names are hardcoded.
+
+The original files are downloaded to ./source. 
+Then, they are compressed to ./input. 
+Next, they are translated to the HRF, which are stored in ./data.
