@@ -31,6 +31,8 @@ DATA_SETS = [
     'dna',
     'english',
     'dblp',
+    #'github50',
+
 ]
 QUERY_LENGTH = [10**i for i in range(3,8)]
 OMITTED_COMBINATIONS = []
@@ -232,6 +234,38 @@ rule download_pizza_and_chili_sources:
             echo "$RESULT already exists. Skipping decompression."
         fi
         """
+
+rule download_50GB_github:
+    output:
+        out_file = 'source/github50'
+    shell:
+        """
+        git clone https://github.com/acubeLab/PPC_utils4BigData
+        cd PPC_utils4BigData
+        ./download_dataset.py -s 50GiB -o ./tmp
+        abs_path="$(realpath ./tmp/50GiB_github_filename_sort_50GiB.tar.zstd_22)"
+        ./decompress_dataset.py "$abs_path" --dataset -o tmp/blobs
+        find ./tmp/blobs -type f -print0 | sort -z | xargs -0 cat -- >> ../source/github50
+        """
+# /PPC_utils4BigData$ ./download_dataset.py -s 50GiB -o ./tmp
+# Output directory: /data/grammar-extraction-test/PPC_utils4BigData/tmp
+# Downloading from the https://pages.di.unipi.it/boffa/swh_endpoint
+# --2025-12-03 16:09:17--  https://pages.di.unipi.it/boffa/swh_endpoint/50GiB_github/50GiB_github_filename_sort_50GiB.tar.zstd_22
+# Resolving pages.di.unipi.it (pages.di.unipi.it)... 131.114.2.105
+# Connecting to pages.di.unipi.it (pages.di.unipi.it)|131.114.2.105|:443... connected.
+# HTTP request sent, awaiting response... 200 OK
+# Length: 5453429452 (5.1G) [application/x-tar]
+# Saving to: ‘50GiB_github_filename_sort_50GiB.tar.zstd_22’
+#
+# 50GiB_github_filena 100%[===================>]   5.08G  7.26MB/s    in 12m 14s
+#
+# 2025-12-03 16:21:31 (7.09 MB/s) - ‘50GiB_github_filename_sort_50GiB.tar.zstd_22’ saved [5453429452/5453429452]
+#
+# Fatal: Cannot download the 50GiB archives
+#  'tuple' object has no attribute 'decode'
+
+# ./decompress_dataset.py ./tmp/repos_all_compressed.tar.zstd_22 --dataset -o tmp/repos --force
+
 
 rule download_pizza_and_chili_pitches:
     output:
