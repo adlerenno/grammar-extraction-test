@@ -96,9 +96,38 @@ rule grammar_extract_sakai_et_al:
             [[ -z "$num1" || -z "$num2" ]] && continue  # skip empty lines
             echo "Query $num1 to $num2"
             java -jar grammarextractor_current.jar -r -InputFile {input.source} -OutputFile temp.dumb -from "$num1" -to "$num2" -passes 0
+            wc -c < comp.dumb >> bench/{wildcards.filename}.{wildcards.length}.er.filesizes.csv
             if [[ $? -ne 0 ]]; then
                 all_success=false
                 echo "extract-recmpress failed on {input.source} for $num1 $num2"
+            fi
+        done < {input.queries}
+        if $all_success; then
+            echo 1 > {output.indicator}
+        else
+            echo 0 > {output.indicator}
+        fi
+        """
+
+rule grammar_extract_extract_only:
+    input:
+        source = 'data/{filename}',
+        queries = 'queries/{filename}.{length}'
+    output:
+        indicator = 'indicators/{filename}.{length}.e'
+    params:
+        threads = NUMBER_OF_PROCESSORS
+    benchmark: 'bench/{filename}.{length}.e.csv'
+    shell:
+        """all_success=true
+        while IFS=' ' read -r num1 num2; do
+            [[ -z "$num1" || -z "$num2" ]] && continue  # skip empty lines
+            echo "Query $num1 to $num2"
+            java -jar grammarextractor_current.jar -e -InputFile {input.source} -OutputFile temp.dumb -from "$num1" -to "$num2" -passes 0
+            wc -c < comp.dumb >> bench/{wildcards.filename}.{wildcards.length}.e.filesizes.csv
+            if [[ $? -ne 0 ]]; then
+                all_success=false
+                echo "extract failed on {input.source} for $num1 $num2"
             fi
         done < {input.queries}
         if $all_success; then
@@ -122,7 +151,10 @@ rule grammar_extract_decompress_extract_compress:
         while IFS=' ' read -r num1 num2; do
             [[ -z "$num1" || -z "$num2" ]] && continue  # skip empty lines
             echo "Query $num1 to $num2"
+            java -jar grammarextractor_current.jar -d -InputFile {input.source} -OutputFile decomp.dumb -from "$num1" -to "$num2"
             java -jar grammarextractor_current.jar -e -InputFile {input.source} -OutputFile temp.dumb -from "$num1" -to "$num2"
+            java -jar grammarextractor_current.jar -c -InputFile temp.dumb -OutputFile comp.dumb -from "$num1" -to "$num2"
+            wc -c < comp.dumb >> bench/{wildcards.filename}.{wildcards.length}.dec.filesizes.csv
             if [[ $? -ne 0 ]]; then
                 all_success=false
                 echo "extract-recmpress failed on {input.source} for $num1 $num2"
