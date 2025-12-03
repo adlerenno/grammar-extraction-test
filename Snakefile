@@ -169,7 +169,7 @@ rule grammar_extract_decompress_extract_compress_2:
             echo "Query $num1 to $num2"
             java -jar grammarextractor_current.jar -e -InputFile {input.source} -OutputFile temp.dumb -from "$num1" -to "$num2"
             java -jar grammarextractor_current.jar -c -InputFile temp.dumb -OutputFile comp.dumb -from "$num1" -to "$num2"
-            wc -c < comp.dumb >> bench/{wildcards.filename}.{wildcards.length}.dec.filesizes.csv
+            wc -c < comp.dumb.rp >> bench/{wildcards.filename}.{wildcards.length}.dec.filesizes.csv
             if [[ $? -ne 0 ]]; then
                 all_success=false
                 echo "extract-recmpress failed on {input.source} for $num1 $num2"
