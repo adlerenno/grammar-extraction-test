@@ -15,6 +15,7 @@ QUERIES = './queries/'
 INDICATORS = './indicators/'
 BENCHMARK = './bench/'
 RESULT = './results/'
+DECOMB = './decomb/'  # Directory for help files for dec method.
 
 APPROACHES = [
     'er', # extract than recompress
@@ -41,7 +42,7 @@ FILES = [f'indicators/{file}.{length}.{approach}'
          if not (approach, length, file) in OMITTED_COMBINATIONS
          ]
 
-for path in [BENCHMARK, SOURCE, INPUT, DATA, OUTPUT, QUERIES, INDICATORS, RESULT]:
+for path in [BENCHMARK, SOURCE, INPUT, DATA, OUTPUT, QUERIES, INDICATORS, RESULT, DECOMB]:
     os.makedirs(path, exist_ok=True)
 
 
@@ -80,6 +81,7 @@ rule clean:
         rm -rf ./indicators
         rm -rf ./bench
         rm -rf ./results
+        rm -rf ./decomb
         """
 
 rule grammar_extract_sakai_et_al:
@@ -138,7 +140,20 @@ rule grammar_extract_extract_only:
         fi
         """
 
-rule grammar_extract_decompress_extract_compress:
+rule grammar_extract_decompress_extract_compress_1:
+    input:
+        source = 'data/{filename}'
+    output:
+        decomp = 'decomb/{filename}'
+    params:
+        threads = NUMBER_OF_PROCESSORS
+    benchmark: 'bench/{filename}.dec.csv'
+    shell:
+        """
+        java -jar grammarextractor_current.jar -d -InputFile {input.source} -OutputFile {output.decomp} -from "$num1" -to "$num2"
+        """
+
+rule grammar_extract_decompress_extract_compress_2:
     input:
         source = 'data/{filename}',
         queries = 'queries/{filename}.{length}'
@@ -152,7 +167,6 @@ rule grammar_extract_decompress_extract_compress:
         while IFS=' ' read -r num1 num2; do
             [[ -z "$num1" || -z "$num2" ]] && continue  # skip empty lines
             echo "Query $num1 to $num2"
-            java -jar grammarextractor_current.jar -d -InputFile {input.source} -OutputFile decomp.dumb -from "$num1" -to "$num2"
             java -jar grammarextractor_current.jar -e -InputFile {input.source} -OutputFile temp.dumb -from "$num1" -to "$num2"
             java -jar grammarextractor_current.jar -c -InputFile temp.dumb -OutputFile comp.dumb -from "$num1" -to "$num2"
             wc -c < comp.dumb >> bench/{wildcards.filename}.{wildcards.length}.dec.filesizes.csv
