@@ -31,7 +31,8 @@ DATA_SETS = [
     'dna',
     'english',
     'dblp',
-    #'github50',
+    'github50',
+    'wikidump'
 
 ]
 QUERY_LENGTH = [10**i for i in range(3,8)]
@@ -235,6 +236,17 @@ rule download_pizza_and_chili_sources:
         fi
         """
 
+rule download_wikidump:
+    output:
+        out_file = 'source/'
+    shell:
+        """
+        cd source
+        wget https://dumps.wikimedia.org/enwiki/latest/enwiki-latest-pages-articles.xml.bz2
+        bzip2 -dk enwiki-latest-pages-articles.xml.bz2
+        mv enwiki-latest-pages-articles.xml wikidump
+        """
+
 rule download_50GB_github:
     output:
         out_file = 'source/github50'
@@ -372,13 +384,6 @@ rule download_pizza_and_chili_dblp:
         fi
         mv $RESULT dblp 
         """
-
-rule download_large_scale_source_datasts:
-    output:
-        out_files = ['']
-    shell:
-        """./scripts/download_dataset.py -s 200GiB -l all -o ./source
-        ./scripts/decompress_dataset.py --dataset <abs_path_archive> -o ./source"""
 
 rule install_java:
     shell:
