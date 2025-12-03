@@ -18,7 +18,8 @@ RESULT = './results/'
 
 APPROACHES = [
     'er', # extract than recompress
-    'dec' # uncompress, extract than compress
+    'dec', # uncompress, extract than compress
+    'e' # only extract
 ]
 
 
