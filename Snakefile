@@ -102,7 +102,7 @@ rule grammar_extract_sakai_et_al:
             [[ -z "$num1" || -z "$num2" ]] && continue  # skip empty lines
             echo "Query $num1 to $num2"
             java -jar grammarextractor_current.jar -r -InputFile {input.source} -OutputFile temp.dumb -from "$num1" -to "$num2" -passes 0
-            wc -c < comp.dumb >> bench/{wildcards.filename}.{wildcards.length}.er.filesizes.csv
+            wc -c < temp.dumb >> bench/{wildcards.filename}.{wildcards.length}.er.filesizes.csv
             if [[ $? -ne 0 ]]; then
                 all_success=false
                 echo "extract-recmpress failed on {input.source} for $num1 $num2"
@@ -130,7 +130,7 @@ rule grammar_extract_extract_only:
             [[ -z "$num1" || -z "$num2" ]] && continue  # skip empty lines
             echo "Query $num1 to $num2"
             java -jar grammarextractor_current.jar -e -InputFile {input.source} -OutputFile temp.dumb -from "$num1" -to "$num2" -passes 0
-            wc -c < comp.dumb >> bench/{wildcards.filename}.{wildcards.length}.e.filesizes.csv
+            wc -c < temp.dumb >> bench/{wildcards.filename}.{wildcards.length}.e.filesizes.csv
             if [[ $? -ne 0 ]]; then
                 all_success=false
                 echo "extract failed on {input.source} for $num1 $num2"
