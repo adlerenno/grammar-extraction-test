@@ -31,9 +31,8 @@ DATA_SETS = [
     'dna',
     'english',
     'dblp',
-    'github50',
-    'wikidump'
-
+    #'github50',
+    #'wikidump'
 ]
 QUERY_LENGTH = [10**i for i in range(3,8)]
 OMITTED_COMBINATIONS = []
