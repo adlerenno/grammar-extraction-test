@@ -99,8 +99,8 @@ rule grammar_extract_sakai_et_al:
         """all_success=true
         while IFS=' ' read -r num1 num2; do
             [[ -z "$num1" || -z "$num2" ]] && continue  # skip empty lines
-            echo "Query $num1 to $num2"
-            java -jar grammarextractor_current.jar -r -InputFile {input.source} -OutputFile temp.dumb -from "$num1" -to "$num2" -passes 0
+            echo "Query java -jar grammarextractor_current.jar -r -InputFile {input.source} -OutputFile temp.dumb -from "$num1" -to "$num2" -passes 0"
+            java -jar grammarextractor_current.jar -r -InputFile {input.source} -OutputFile temp.dumb -from "$num1" -to "$num2" -passes 1000 -verbosity 1
             wc -c < temp.dumb >> bench/{wildcards.filename}.{wildcards.length}.er.filesizes.csv
             if [[ $? -ne 0 ]]; then
                 all_success=false
