@@ -26,7 +26,7 @@ APPROACHES = [
 
 DATA_SETS = [
     'sources',
-    'pitches',
+    #'pitches',
     'proteins',
     'dna',
     'english',
