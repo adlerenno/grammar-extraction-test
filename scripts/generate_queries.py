@@ -1,3 +1,4 @@
+import argparse
 import random
 import os
 from math import floor
@@ -20,3 +21,11 @@ def generate_queries(input_file, output_path, query_length, num_queries):
             out.write(f'{query} {query+query_length}\n')
 
     # print(f"Generated {len(query)} matching queries)
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('input_file', type=str)
+    parser.add_argument('output_path', type=str)
+    parser.add_argument('query_length', type=int)
+    parser.add_argument('num_queries', type=int)
+    args = parser.parse_args()
+    generate_queries(args.input_file, args.output_path, args.query_length, args.num_queries)
