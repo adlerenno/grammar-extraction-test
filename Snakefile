@@ -25,11 +25,11 @@ APPROACHES = [
 
 
 DATA_SETS = [
-    'sources',
+    #'sources',
     #'pitches',
     'proteins',
     'dna',
-    'english',
+    #'english',
     'dblp',
     #'github50',
     #'wikidump'
