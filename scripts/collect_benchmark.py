@@ -79,7 +79,7 @@ def combine_query(DATA_SETS, APPROACHES, QUERY_LENGTH, out_file):
                 query_count[k] = sum(1 for _ in open(f'queries/{data_set}.{QUERY_LENGTH[k]}'))
 
             for approach in APPROACHES:
-                for k in range(1, QUERY_LENGTH):
+                for k in range(1, len(QUERY_LENGTH)):
                     bench = f'bench/{data_set}.{QUERY_LENGTH[k]}.{approach}.csv'
                     indicator = get_success_indicator(f'indicators/{data_set}.{QUERY_LENGTH[k]}.{approach}')
                     if isfile(bench):
