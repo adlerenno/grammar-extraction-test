@@ -230,6 +230,8 @@ rule download_pizza_and_chili_sources:
         fi
         if [ ! -f "$RESULT" ]; then
             gzip -dk "$FILENAME"
+            mv ${{RESULT}} ${{RESULT}}.cp
+            iconv -f latin1 -t utf-8 ${{RESULT}}.cp | tr '\205' '\n' > $RESULT
         else
             echo "$RESULT already exists. Skipping decompression."
         fi

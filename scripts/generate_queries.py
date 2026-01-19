@@ -6,7 +6,7 @@ from math import floor
 
 def get_file_length(file_path):
     char_count = 0
-    with open(file_path, 'r') as file:
+    with open(file_path, 'r', errors='ignore') as file:
         for line in file:
             char_count += len(line)
     return char_count
