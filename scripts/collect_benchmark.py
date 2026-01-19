@@ -37,8 +37,10 @@ def add_stats(data, filename):
             data[7] += bench_data[7]
             data[8] = max(data[8], bench_data[8])  # Not good, but I won't evaluate it anyway.
             data[9] += bench_data[9]
+            return data
     else:
         bench_data = ['NA' for _ in range(10)]
+    return bench_data
 
 
 
