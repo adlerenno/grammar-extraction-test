@@ -51,7 +51,7 @@ def get_file_size(filename) -> int:
         return -1
 
 def get_average_output_size(approach, data_set, query_type) -> float:
-    filename = f'{data_set}.{query_type}.{approach}.csv'
+    filename = f'bench/{data_set}.{query_type}.{approach}.filesizes.csv'
     if os.path.isfile(filename):
         with open(filename, 'r') as g:
             lines = g.readlines()
