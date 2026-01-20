@@ -50,6 +50,16 @@ def get_file_size(filename) -> int:
     else:
         return -1
 
+def get_average_output_size(approach, data_set, query_type) -> float:
+    filename = f'{data_set}.{query_type}.{approach}.csv'
+    if os.path.isfile(filename):
+        with open(filename, 'r') as g:
+            lines = g.readlines()
+            sizes = sum(map(lambda x: int(x), lines))
+            count = len(lines)
+        return sizes / count
+    else:
+        return -1
 
 def combine_comp(DATA_SETS, out_file):
     with open(out_file, "w") as f:
@@ -73,7 +83,7 @@ def combine_query(DATA_SETS, APPROACHES, QUERY_LENGTH, out_file):
     with (open(out_file, "w") as f):
         writer = csv.writer(f, delimiter="\t")
         writer.writerow(
-            ['algorithm', 'dataset', 'type', 'query_count', 'successful', 's', 'h:m:s', 'max_rss', 'max_vms', 'max_uss', 'max_pss', 'io_in',
+            ['algorithm', 'dataset', 'type', 'query_count', 'average_output_size', 'successful', 's', 'h:m:s', 'max_rss', 'max_vms', 'max_uss', 'max_pss', 'io_in',
              'io_out', 'mean_load', 'cpu_time'])
         for data_set in DATA_SETS:
             query_count = defaultdict(lambda: 0)
@@ -93,4 +103,4 @@ def combine_query(DATA_SETS, APPROACHES, QUERY_LENGTH, out_file):
                             #    bench_data = add_stats(list(bench_data), data_set)
                     else:
                         bench_data = ['NA' for _ in range(10)]
-                    writer.writerow([approach, data_set, str(QUERY_LENGTH[k]), str(query_count[k]), indicator] + bench_data)
+                    writer.writerow([approach, data_set, str(QUERY_LENGTH[k]), str(query_count[k]), str(get_average_output_size(approach, data_set, QUERY_LENGTH[k])), indicator] + bench_data)
