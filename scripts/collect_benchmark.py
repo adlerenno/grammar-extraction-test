@@ -89,8 +89,8 @@ def combine_query(DATA_SETS, APPROACHES, QUERY_LENGTH, out_file):
                             reader = csv.reader(g, delimiter="\t")
                             next(reader)  # Headers line
                             bench_data = next(reader)
-                            if approach == 'dec':
-                                bench_data = add_stats(list(bench_data), data_set)
+                            #if approach == 'dec':
+                            #    bench_data = add_stats(list(bench_data), data_set)
                     else:
                         bench_data = ['NA' for _ in range(10)]
                     writer.writerow([approach, data_set, str(QUERY_LENGTH[k]), str(query_count[k]), indicator] + bench_data)
