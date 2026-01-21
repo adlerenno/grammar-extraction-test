@@ -64,11 +64,12 @@ def get_average_output_size(approach, data_set, query_type) -> float:
 def combine_comp(DATA_SETS, out_file):
     with open(out_file, "w") as f:
         writer = csv.writer(f, delimiter="\t")
-        writer.writerow(['dataset', 'original_file_size', 'compressed_file_size', 's', 'h:m:s', 'max_rss', 'max_vms', 'max_uss', 'max_pss', 'io_in', 'io_out', 'mean_load', 'cpu_time'])
+        writer.writerow(['dataset', 'original_file_size', 'compressed_file_size', 'human_readable_size', 's', 'h:m:s', 'max_rss', 'max_vms', 'max_uss', 'max_pss', 'io_in', 'io_out', 'mean_load', 'cpu_time'])
         for data_set in DATA_SETS:
                 bench = f'bench/{data_set}.csv'
                 file_original_size = get_file_size(f'source/{data_set}')
-                file_compressed_size = get_file_size(f'data/{data_set}')
+                file_compressed_size = get_file_size(f'input/{data_set}.rp')
+                file_human_readable = get_file_size(f'data/{data_set}')
                 if isfile(bench):
                     with open(bench, 'r') as g:
                         reader = csv.reader(g, delimiter="\t")
@@ -76,7 +77,7 @@ def combine_comp(DATA_SETS, out_file):
                         bench_data = next(reader)
                 else:
                     bench_data = ['NA' for _ in range(10)]
-                writer.writerow([data_set, str(file_original_size), str(file_compressed_size)] + bench_data)
+                writer.writerow([data_set, str(file_original_size), str(file_compressed_size), str(file_human_readable)] + bench_data)
 
 
 def combine_query(DATA_SETS, APPROACHES, QUERY_LENGTH, out_file):
