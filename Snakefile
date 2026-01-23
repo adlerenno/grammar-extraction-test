@@ -27,12 +27,12 @@ APPROACHES = [
 DATA_SETS = [
     #'sources',
     #'pitches',
-    'proteins',
-    'dna',
+    #'proteins',
+    #'dna',
     #'english',
-    'dblp',
-    #'github50',
-    #'wikidump'
+    #'dblp',
+    'github50',
+    'wikidump'
 ]
 QUERY_LENGTH = [10**i for i in range(3,8)]
 OMITTED_COMBINATIONS = []
@@ -157,7 +157,7 @@ rule grammar_extract_decompress_extract_compress_1:
 
 rule grammar_extract_decompress_extract_compress_2:
     input:
-        source = 'data/{filename}',
+        source = 'decomb/{filename}',
         queries = 'queries/{filename}.{length}'
     output:
         indicator = 'indicators/{filename}.{length}.dec'
@@ -170,7 +170,7 @@ rule grammar_extract_decompress_extract_compress_2:
             [[ -z "$num1" || -z "$num2" ]] && continue  # skip empty lines
             echo "Query $num1 to $num2"
             java -jar grammarextractor_current.jar -e -InputFile {input.source} -OutputFile temp.dumb -from "$num1" -to "$num2"
-            java -jar grammarextractor_current.jar -c -InputFile temp.dumb -from "$num1" -to "$num2"
+            java -jar grammarextractor_current.jar -c -InputFile temp.dumb
             wc -c < temp.dumb.rp >> bench/{wildcards.filename}.{wildcards.length}.dec.filesizes.csv
             if [[ $? -ne 0 ]]; then
                 all_success=false
