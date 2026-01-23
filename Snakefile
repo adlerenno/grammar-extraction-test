@@ -239,7 +239,7 @@ rule download_pizza_and_chili_sources:
 
 rule download_wikidump:
     output:
-        out_file = 'source/'
+        out_file = 'source/wikidump'
     shell:
         """
         cd source
